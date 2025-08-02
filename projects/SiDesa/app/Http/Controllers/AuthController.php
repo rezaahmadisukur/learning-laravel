@@ -11,13 +11,20 @@ use Illuminate\Http\RedirectResponse;
 
 class AuthController extends Controller
 {
-    public function login(): View
+    public function login(): View|RedirectResponse
     {
+        if (Auth::check()) {
+            return back();
+        }
+
         return view("pages.auth.login");
     }
 
     public function authenticate(Request $request): RedirectResponse
     {
+        if (Auth::check()) {
+            return back();
+        }
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
@@ -30,11 +37,11 @@ class AuthController extends Controller
 
             if ($userStatus == "submitted") {
                 return back()->withErrors([
-                    "email" => "Akun anda masih menunggu persetujuan admin"
+                    "error" => "Akun anda masih menunggu persetujuan admin"
                 ]);
             } elseif ($userStatus == "rejected") {
                 return back()->withErrors([
-                    "email" => "Akun anda telah ditolak admin"
+                    "error" => "Akun anda telah ditolak admin"
                 ]);
             }
 
@@ -46,8 +53,11 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
-    public function registerView(): View
+    public function registerView(): View|RedirectResponse
     {
+        if (Auth::check()) {
+            return back();
+        }
         return view("pages.auth.register");
     }
 
@@ -81,6 +91,9 @@ class AuthController extends Controller
      */
     public function logout(Request $request): RedirectResponse
     {
+        if (!Auth::check()) {
+            return redirect('/');
+        }
         Auth::logout();
 
         $request->session()->invalidate();

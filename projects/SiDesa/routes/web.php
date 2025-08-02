@@ -12,9 +12,10 @@ Route::get('/register', [AuthController::class, 'registerView']);
 Route::post('/register', [AuthController::class, 'register']);
 
 
-Route::get('/dashboard', fn() => view('pages.dashboard'));
+Route::get('/dashboard', fn() => view('pages.dashboard'))
+    ->middleware('role:Admin,User');
 
-Route::controller(ResidentController::class)->group(function () {
+Route::controller(ResidentController::class)->middleware(['role:Admin'])->group(function () {
     Route::get('/resident', 'index');
     Route::get('/resident/create', 'create');
     Route::get('/resident/{resident:id}/edit', 'edit');

@@ -53,6 +53,13 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="alert"
                                                 aria-label="Close"></button>
                                         </div>
+                                    @elseif ($errors->first('error'))
+                                        <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                                            style="font-size: x-small">
+                                            {{ $errors->first('error')}}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                aria-label="Close"></button>
+                                        </div>
                                     @endif
 
                                     <form class="user" action="/login" method="POST">
