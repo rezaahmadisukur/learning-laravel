@@ -1,0 +1,11 @@
+.error {
+    margin: 4px;
+    color: #ff0000;
+    font-size: 14px;
+    font-style: italic;
+    width: 100%;
+}
+
+.border-error {
+    border: 1.5px solid #ff0000;
+}
