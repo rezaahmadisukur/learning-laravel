@@ -25,7 +25,8 @@ Route::controller(ResidentController::class)->middleware(['role:Admin'])->group(
     Route::delete('/resident/{resident:id}', 'destroy');
 });
 
-Route::controller(UserController::class)->group(function () {
+Route::controller(UserController::class)->middleware(['role:Admin'])->group(function () {
+    Route::get('/account-list', 'account_list_view');
     Route::get('/account-request', 'account_request_view');
     Route::post('/account-request/approval/{user:id}', 'account_approval');
 });
