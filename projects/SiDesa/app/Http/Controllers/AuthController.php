@@ -11,56 +11,6 @@ use Illuminate\Http\RedirectResponse;
 
 class AuthController extends Controller
 {
-    public function login(): View|RedirectResponse
-    {
-        if (Auth::check()) {
-            return back();
-        }
-
-        return view("pages.auth.login");
-    }
-
-    public function authenticate(Request $request): RedirectResponse
-    {
-        if (Auth::check()) {
-            return back();
-        }
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
-
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-
-            $userStatus = Auth::user()->status;
-
-            if ($userStatus == "submitted") {
-                return back()->withErrors([
-                    "error" => "Akun anda masih menunggu persetujuan admin"
-                ]);
-            } elseif ($userStatus == "rejected") {
-                return back()->withErrors([
-                    "error" => "Akun anda telah ditolak admin"
-                ]);
-            }
-
-            return redirect()->intended('dashboard');
-        }
-
-        return back()->withErrors([
-            'email' => 'Terjadi kesalahan, periksa kembali email atau password anda.',
-        ])->onlyInput('email');
-    }
-
-    public function registerView(): View|RedirectResponse
-    {
-        if (Auth::check()) {
-            return back();
-        }
-        return view("pages.auth.register");
-    }
-
     /**
      * Summary of register
      * @param \Illuminate\Http\Request $request
@@ -84,6 +34,76 @@ class AuthController extends Controller
         return redirect('/')->with('success', 'Berhasil mendaftarkan akun, menunggu persetujuan admin');
     }
 
+    public function login(): View|RedirectResponse
+    {
+        if (Auth::check()) {
+            return back();
+        }
+
+        return view("pages.auth.login");
+    }
+
+    public function authenticate(Request $request): RedirectResponse
+    {
+        if (Auth::check()) {
+            return back();
+        }
+
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ], [
+            'email.required' => 'Email harus diisi',
+            'email.email' => 'Email tidak valid',
+            'password.required' => 'Password harus diisi',
+        ]);
+
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+
+            $userStatus = Auth::user()->status;
+
+            switch ($userStatus) {
+                case 'submitted':
+                    $this->__logout($request);
+                    return back()->withErrors([
+                        "email" => "Akun anda masih menunggu persetujuan admin"
+                    ]);
+                case 'rejected':
+                    $this->__logout($request);
+                    return back()->withErrors([
+                        "email" => "Akun anda telah ditolak admin"
+                    ]);
+                default:
+                    return redirect()->intended('dashboard');
+            }
+        }
+
+        return back()->withErrors([
+            'email' => 'Terjadi kesalahan, periksa kembali email atau password anda.',
+        ])->onlyInput('email');
+    }
+
+    public function registerView(): View|RedirectResponse
+    {
+        if (Auth::check()) {
+            return back();
+        }
+        return view("pages.auth.register");
+    }
+
+    /**
+     * Summary of __logout
+     * @param \Illuminate\Http\Request $request
+     * @return void
+     */
+    public function __logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+    }
+
     /**
      * Summary of logout
      * @param \Illuminate\Http\Request $request
@@ -94,11 +114,8 @@ class AuthController extends Controller
         if (!Auth::check()) {
             return redirect('/');
         }
-        Auth::logout();
 
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
+        $this->__logout($request);
 
         return redirect('/');
     }

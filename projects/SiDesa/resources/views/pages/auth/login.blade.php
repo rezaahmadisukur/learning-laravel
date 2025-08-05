@@ -21,15 +21,31 @@
     <link href="{{ asset('template/css/sb-admin-2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('template/css/bootstrap.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body class="bg-gradient-primary">
-    {{-- @if ($errors->any())
-    @dd($errors->all())
-    @endif --}}
-    <div class="container">
 
+    @if (session()->has('success'))
+        <script>
+            Swal.fire({
+                title: "Sukses",
+                text: "{{ session()->get('success') }}",
+                icon: "success"
+            });
+        </script>
+    @endif
+    @if ($errors->any())
+        <script>
+            Swal.fire({
+                title: "Terjadi Kesalahan",
+                text: "@foreach($errors->all() as $error) {{ $error }}{{ $loop->last ? '.' : ', '}} @endforeach",
+                icon: "error"
+            });
+        </script>
+    @endif
+
+    <div class="container">
         <!-- Outer Row -->
         <div class="row justify-content-center">
 
@@ -45,22 +61,6 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Login</h1>
                                     </div>
-
-                                    @if (session('success'))
-                                        <div class="alert alert-success alert-dismissible fade show" role="alert"
-                                            style="font-size: x-small">
-                                            {{ session('success')}}
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                                aria-label="Close"></button>
-                                        </div>
-                                    @elseif ($errors->first('error'))
-                                        <div class="alert alert-danger alert-dismissible fade show" role="alert"
-                                            style="font-size: x-small">
-                                            {{ $errors->first('error')}}
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                                aria-label="Close"></button>
-                                        </div>
-                                    @endif
 
                                     <form class="user" action="/login" method="POST">
                                         @csrf
