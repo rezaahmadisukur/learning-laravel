@@ -14,7 +14,7 @@
             (object) [
                 'title' => 'Daftar Akun',
                 'path' => 'account-list',
-                'icon' => 'fas fa-fw fa-user'
+                'icon' => 'fas fa-fw fa-list'
             ],
             (object) [
                 'title' => 'Permintaan Akun',

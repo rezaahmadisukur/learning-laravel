@@ -29,4 +29,9 @@ Route::controller(UserController::class)->middleware(['role:Admin'])->group(func
     Route::get('/account-list', 'account_list_view');
     Route::get('/account-request', 'account_request_view');
     Route::post('/account-request/approval/{user:id}', 'account_approval');
+    Route::get('/profile', 'profile_view');
+    Route::post('/profile/{user:id}', 'update_profile');
+    Route::get('/change-password', 'change_password_view');
+    Route::post('/change-password/{user:id}', 'change_password');
 });
+

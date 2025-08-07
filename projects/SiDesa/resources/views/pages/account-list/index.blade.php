@@ -47,15 +47,17 @@
                                             <td>{{ $user->name }}</td>
                                             <td>{{ $user->email }}</td>
                                             <td>
-                                                @if($user->status == 'approved')
-                                                    <span class="badge badge-success">
-                                                        Aktif
-                                                    </span>
-                                                @else
-                                                    <span class="badge badge-danger">
-                                                        Tidak Aktif
-                                                    </span>
-                                                @endif
+                                                <div class="d-flex justify-content-center">
+                                                    @if($user->status == 'approved')
+                                                        <span class="badge badge-success px-3 py-1" style="border-radius: 10px">
+                                                            Aktif
+                                                        </span>
+                                                    @else
+                                                        <span class="badge badge-danger px-3 py-1" style="border-radius: 10px">
+                                                            Tidak Aktif
+                                                        </span>
+                                                    @endif
+                                                </div>
                                             </td>
                                             <td class="d-flex justify-content-center">
                                                 <div class="d-flex gap-2">
