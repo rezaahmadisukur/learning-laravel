@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Resident;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
@@ -18,14 +19,16 @@ class UserController extends Controller
     public function account_request_view()
     {
         $users = User::where('status', 'submitted')->get();
+        $residents = Resident::where('user_id', null)->get();
 
-        return view("pages.account-request.index", compact("users"));
+        return view("pages.account-request.index", compact("users", "residents"));
     }
 
     public function account_approval(Request $request, User $user)
     {
         $request->validate([
-            'for' => ['required', Rule::in(['approve', 'reject', 'activate', 'deactivate'])]
+            'for' => ['required', Rule::in(['approve', 'reject', 'activate', 'deactivate'])],
+            'resident_id' => ['nullable', 'exists:residents,id'],
         ]);
 
         $for = $request->input('for');
@@ -33,6 +36,15 @@ class UserController extends Controller
         $user = User::findOrFail($user->id);
         $user->status = $for == "approve" || $for == "activate" ? "approved" : "rejected";
         $user->save();
+
+        $resident_id = $request->input('resident_id');
+
+        if ($request->has('resident_id') && isset($resident_id)) {
+            Resident::where('id', $resident_id)
+                ->update([
+                    'user_id' => $user->id
+                ]);
+        }
 
         switch ($for) {
             case 'activate':

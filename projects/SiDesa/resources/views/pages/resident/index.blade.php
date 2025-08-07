@@ -59,19 +59,26 @@
                                         <td>{{ $resident->phone }}</td>
                                         <td>{{ $resident->status }}</td>
                                         <td>
-                                            <div class="d-flex">
+                                            <div class="d-flex gap-2 align-items-center">
                                                 <a href="/resident/{{ $resident->id }}/edit"
-                                                    class="d-inline-block mr-2 btn btn-sm btn-warning">
+                                                    class="d-inline-block btn btn-sm btn-warning">
                                                     <i class="fas fa-pen"></i>
                                                 </a>
                                                 <button type="button" class="d-inline-block btn btn-sm btn-danger"
                                                     data-bs-toggle="modal" data-bs-target="#confirmationDelete-{{ $resident->id }}">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
+                                                @if(!is_null($resident->user_id))
+                                                    <button type="button" class="d-inline-block btn btn-sm btn-outline-info"
+                                                        data-bs-toggle="modal" data-bs-target="#detailAccount-{{ $resident->id }}">
+                                                        Lihat Akun
+                                                    </button>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>
                                     @include('pages.resident.confirmation-delete')
+                                    @include('pages.resident.detail-account')
                                 @endforeach
                             </tbody>
                         @endif
