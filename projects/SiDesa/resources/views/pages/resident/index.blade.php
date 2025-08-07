@@ -19,7 +19,7 @@
                         </div>
                     @endif
                     <table class="table table-responsive table-bordered table-hovered">
-                        <thead>
+                        <thead class="thead-dark">
                             <tr>
                                 <th>#</th>
                                 <th>NIK</th>
@@ -47,7 +47,7 @@
                             <tbody>
                                 @foreach ($residents as $resident)
                                     <tr>
-                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $loop->iteration + $residents->firstItem() - 1 }}</td>
                                         <td>{{ $resident->nik }}</td>
                                         <td>{{ $resident->name }}</td>
                                         <td>{{ $resident->gender }}</td>
@@ -84,6 +84,11 @@
                         @endif
                     </table>
                 </div>
+                @if ($residents->hasPages())
+                    <div class="card-footer">
+                        {{ $residents->links('pagination::bootstrap-5') }}
+                    </div>
+                @endif
             </div>
         </div>
     </div>

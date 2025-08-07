@@ -42,7 +42,7 @@
                                 <tbody>
                                     @foreach ($users as $user)
                                         <tr>
-                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $loop->iteration + $users->firstItem() - 1 }}</td>
                                             <td>{{ $user->name }}</td>
                                             <td>{{ $user->email }}</td>
                                             <td class="d-flex justify-content-center">
@@ -67,6 +67,11 @@
                         </table>
                     </div>
                 </div>
+                @if ($users->hasPages())
+                    <div class="card-footer mx-3">
+                        {{ $users->links('pagination::bootstrap-5') }}
+                    </div>
+                @endif
             </div>
         </div>
     </div>

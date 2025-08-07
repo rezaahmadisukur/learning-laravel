@@ -62,7 +62,7 @@
                                         <h1 class="h4 text-gray-900 mb-4">Login</h1>
                                     </div>
 
-                                    <form class="user" action="/login" method="POST">
+                                    <form class="user" action="/login" method="POST" onsubmit="loadingBtnDisabled()">
                                         @csrf
                                         <div class="form-group">
                                             <input type="email" id="email" name="email" aria-describedby="emailHelp"
@@ -73,8 +73,10 @@
                                             <input type="password" id="password" name="password" placeholder="Password"
                                                 class="form-control form-control-user" />
                                         </div>
-                                        <button type="submit" class="btn btn-primary btn-user btn-block">
+                                        <button id="submitBtn" type="submit"
+                                            class="btn btn-primary btn-user btn-block d-flex align-items-center justify-content-center gap-2">
                                             Login
+                                            <span id="loading"></span>
                                         </button>
                                     </form>
                                     <hr>
@@ -103,6 +105,7 @@
     <!-- Custom scripts for all pages-->
     <script src="{{ asset('template/js/sb-admin-2.min.js') }}"></script>
     <script src="{{ asset('template/js/bootstrap.bundle.js') }}"></script>
+    <script src="{{ asset('js/script.js') }}"></script>
 </body>
 
 </html>
