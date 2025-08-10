@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -47,8 +48,8 @@ class User extends Authenticatable
         ];
     }
 
-    public function residents(): HasMany
+    public function resident(): HasOne
     {
-        return $this->hasMany(Resident::class);
+        return $this->hasOne(Resident::class);
     }
 }

@@ -27,6 +27,11 @@
                 'title' => 'Dashboard',
                 'path' => 'dashboard',
                 'icon' => 'fas fa-fw fa-tachometer-alt'
+            ],
+            (object) [
+                'title' => 'Pengaduan',
+                'path' => 'complaint',
+                'icon' => 'fas fa-fw fa-scroll'
             ]
         ]
     ]
